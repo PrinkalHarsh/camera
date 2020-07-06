@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import Share from 'react-native-share';
 
 class App extends Component {
   render() {
@@ -24,6 +25,11 @@ class App extends Component {
             style={styles.capture}>
             <Text style={{fontSize: 14}}> SNAP </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.share_image.bind(this)}
+            style={styles.capture}>
+            <Text>Share Image</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -32,8 +38,18 @@ class App extends Component {
     if (this.camera) {
       const options = {quality: 0.5, base64: true};
       const data = await this.camera.takePictureAsync(options);
-      console.log(data.uri);
+      console.log('data', data.uri);
     }
+  };
+
+  share_image = async (options) => {
+    Share.open(options)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        err && console.log(err);
+      });
   };
 }
 
